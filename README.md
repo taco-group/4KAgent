@@ -5,6 +5,8 @@
 [![](https://img.shields.io/badge/Project%20Page-8A2BE2)](https://4kagent.github.io)&nbsp;
 [![arXiv](https://img.shields.io/badge/arXiv%20paper-2507.07105-b31b1b.svg)](https://arxiv.org/abs/2507.07105)&nbsp;
 [![🤗 Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-DIV--4K--50-yellow)]()
+![visitors](https://visitor-badge.laobi.icu/badge?page_id=taco-group/4KAgent)
+
 
 </div>
 
