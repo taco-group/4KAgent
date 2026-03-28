@@ -14,7 +14,7 @@ from PIL import Image
 
 from . import prompts
 from executor import executor, Tool
-from llm import GPT4, AzureGPT, DepictQA, PerceptionVLMAgent, LlamaVisionAgent
+from llm import GPT4, AzureGPT, MiniMaxLLM, DepictQA, PerceptionVLMAgent, LlamaVisionAgent
 
 from utils.img_tree import ImgTree
 from utils.logger import get_logger
@@ -62,6 +62,7 @@ class The4KAgent:
         tool_run_gpu_id: Optional[int] = None,
         perception_agent_run_gpu_id: Optional[int] = None,
         profile_name: Optional[str] = None,
+        llm_provider: Optional[str] = None,
     ) -> None:
         # paths
         self._prepare_dir(input_path, output_dir)
@@ -73,7 +74,8 @@ class The4KAgent:
             with_reflection,
             # with_rollback,
             tool_run_gpu_id,
-            profile_name
+            profile_name,
+            llm_provider
         )
         # components
         self._create_components(llm_config_path, schedule_experience_path, silent)
@@ -124,6 +126,7 @@ class The4KAgent:
         # with_rollback: bool,
         tool_run_gpu_id: Optional[int],
         profile_name: Optional[str] = None,
+        llm_provider: Optional[str] = None,
     ) -> None:
         # extract profile
         self.profile_name = profile_name or "FastGen4K_P"
@@ -167,7 +170,9 @@ class The4KAgent:
         
         self.fast_4k = self.profile.get("Fast4K", False)
         self.fast4k_side_thres = self.profile.get("Fast4kSideThres", 1024)
-        
+
+        self.llm_provider = llm_provider or "gpt4"
+
         self.project_root = Path(__file__).resolve().parent.parent # 4kagent dir path
         
         
@@ -212,12 +217,27 @@ class The4KAgent:
             )
         
         # language models
-        self.gpt4 = GPT4(
-            config_path=llm_config_path,
-            logger=self.qa_logger,
-            silent=silent,
-            system_message=prompts.system_message,
-        )
+        if self.llm_provider == "minimax":
+            self.gpt4 = MiniMaxLLM(
+                config_path=llm_config_path,
+                logger=self.qa_logger,
+                silent=silent,
+                system_message=prompts.system_message,
+            )
+        elif self.llm_provider == "azure":
+            self.gpt4 = AzureGPT(
+                config_path=llm_config_path,
+                logger=self.qa_logger,
+                silent=silent,
+                system_message=prompts.system_message,
+            )
+        else:
+            self.gpt4 = GPT4(
+                config_path=llm_config_path,
+                logger=self.qa_logger,
+                silent=silent,
+                system_message=prompts.system_message,
+            )
         # self.gpt4 = AzureGPT(
         #     config_path=llm_config_path,
         #     logger=self.qa_logger,
