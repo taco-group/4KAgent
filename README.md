@@ -84,6 +84,13 @@ Please refer to the [Installation Guide](installation/Installation.md) for detai
 
 **Prerequest:** Before running 4KAgent, please fill in the API key in [config file](config.yml)
 
+4KAgent supports multiple LLM providers for the reasoning agent. Use `--llm_provider` to select:
+- `gpt4` (default) — OpenAI GPT-4
+- `azure` — Azure OpenAI
+- `minimax` — [MiniMax](https://www.minimaxi.com) (MiniMax-M2.7 with 204K context)
+
+Set the corresponding API key in `config.yml` or via environment variable (`MINIMAX_API_KEY` for MiniMax).
+
 The inference of 4KAgent relies on profile, we present examples here:
 
 **Profiles use 'llama_vision' as the VLM in perception agent:**
@@ -123,9 +130,19 @@ CUDA_VISIBLE_DEVICES=1 python infer_4kagent.py \
   --tool_run_gpu_id 2
 ```
 
-We recommend the `FastGen4K_P` profile, which infers faster and has good perceptual quality. 
+We recommend the `FastGen4K_P` profile, which infers faster and has good perceptual quality.
 
 `tool_run_gpu_id` is used to specify the GPU to execute tools (restoration methods). For GPUs with larger VRAM, `tool_run_gpu_id` can be set as the same as `CUDA_VISIBLE_DEVICES`.
+
+**Using MiniMax as the LLM provider:**
+```bash
+CUDA_VISIBLE_DEVICES=1 python infer_4kagent.py \
+  --input_dir ./assets/profile_test_example/classicsr \
+  --output_dir ./outputs/4KAgent_test/classicsr \
+  --profile_name ExpSR_s4_F \
+  --tool_run_gpu_id 2 \
+  --llm_provider minimax
+```
 
 **Old Photo 4K SR**
 ```bash

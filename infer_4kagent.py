@@ -14,6 +14,9 @@ def parse_args():
     parser.add_argument("--output_dir", type=str, default="./outputs/LQ_results", help="Path to the output directory")
     parser.add_argument("--profile_name", type=str, default="", help="Profile Name for the 4KAgent")
     parser.add_argument("--tool_run_gpu_id", type=int, default=0, help="GPU ID to run tools the toolbox")
+    parser.add_argument("--llm_provider", type=str, default="gpt4",
+                        choices=["gpt4", "azure", "minimax"],
+                        help="LLM provider for the reasoning agent (default: gpt4)")
     return parser.parse_args()
 
 
@@ -23,6 +26,7 @@ def main():
     output_dir = Path(args.output_dir).resolve()
     profile_name = args.profile_name
     tool_run_gpu_id = args.tool_run_gpu_id
+    llm_provider = args.llm_provider
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -53,7 +57,8 @@ def main():
             with_reflection=True,
             silent=False,
             tool_run_gpu_id=tool_run_gpu_id,
-            profile_name=profile_name
+            profile_name=profile_name,
+            llm_provider=llm_provider
         )
 
         agent.run()
