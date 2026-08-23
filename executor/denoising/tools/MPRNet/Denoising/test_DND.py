@@ -59,7 +59,7 @@ bb = info['boundingboxes']
 # Process data
 with torch.no_grad():
     for i in tqdm(range(50)):
-        Idenoised = np.zeros((20,), dtype=np.object)
+        Idenoised = np.zeros((20,), dtype=object)
         filename = '%04d.mat'%(i+1)
         filepath = os.path.join(args.input_dir, 'images_srgb', filename)
         img = h5py.File(filepath, 'r')
