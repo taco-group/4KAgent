@@ -41,8 +41,8 @@ def save_files(file_):
     num_patch = 0
     w, h = lr_img.shape[:2]
     if w > p_max and h > p_max:
-        w1 = list(np.arange(0, w-patch_size, patch_size-overlap, dtype=np.int))
-        h1 = list(np.arange(0, h-patch_size, patch_size-overlap, dtype=np.int))
+        w1 = list(np.arange(0, w-patch_size, patch_size-overlap, dtype=int))
+        h1 = list(np.arange(0, h-patch_size, patch_size-overlap, dtype=int))
         w1.append(w-patch_size)
         h1.append(h-patch_size)
         for i in w1:
